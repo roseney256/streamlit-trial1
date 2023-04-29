@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import time
 from datetime import date
 import pandas as pd
+import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.figure_factory as ff
 import plotly.graph_objs  as go
@@ -20,7 +21,8 @@ import numpy as np
 
 
 import datetime as dt
-
+import matplotlib.pyplot as plt
+from matplotlib import style
 import pandas as pd
 
 sns.set_style("darkgrid")
@@ -30,6 +32,7 @@ import streamlit as st
 from datetime import time
 from datetime import date
 import pandas as pd
+import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.figure_factory as ff
 import plotly.graph_objs  as go
