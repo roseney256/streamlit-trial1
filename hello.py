@@ -1,431 +1,343 @@
 import streamlit as st
-from datetime import time
-from datetime import date
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import plotly.figure_factory as ff
-import plotly.graph_objs  as go
+import altair as alt
+import plotly.express as px
+from sklearn.datasets import load_iris
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.datasets import load_diabetes
-from math import sqrt
-import plotly.express as px
-from PIL import Image
-from prophet import Prophet
-from prophet.plot import plot_plotly
-from plotly import graph_objs as go
-import numpy as np
-
-
-import datetime as dt
-import matplotlib.pyplot as plt
-from matplotlib import style
-import pandas as pd
-
-sns.set_style("darkgrid")
-style.use('ggplot')
-
-import streamlit as st
-from datetime import time
-from datetime import date
-import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import plotly.figure_factory as ff
-import plotly.graph_objs  as go
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.datasets import load_diabetes
-from math import sqrt
-import plotly.express as px
-from PIL import Image
-from prophet import Prophet
-from prophet.plot import plot_plotly
-from plotly import graph_objs as go
-
-import numpy as np
-sns.set_style("darkgrid")
-
-
-st.title("SIRGE APP")
-
-col1, col2, col3 = st.columns(3)
-col1.metric("Temperature", "70 °F", "1.2 °F")
-col2.metric("Wind", "9 mph", "-8%")
-col3.metric("Humidity", "86%", "4%")
-
-# st.markdown("""
-# 	The data set contains information about money spent on advertisement and their generated sales. Money
-# 	was spent on TV, radio and newspaper ads.
-# 	## Problem Statement
-# 	Sales (in thousands of units) for a particular product as a function of advertising budgets (in thousands of
-# 	dollars) for TV, radio, and newspaper media. Suppose that in our role as statistical consultants we are
-# 	asked to suggest.
-# 	Here are a few important questions that you might seek to address:
-# 	- Is there a relationship between advertising budget and sales?
-# 	- How strong is the relationship between the advertising budget and sales?
-# 	- Which media contribute to sales?
-# 	- How accurately can we estimate the effect of each medium on sales?
-# 	- How accurately can we predict future sales?
-# 	- Is the relationship linear?
-# 	We want to find a function that given input budgets for TV, radio and newspaper predicts the output sales
-# 	and visualize the relationship between the features and the response using scatter plots.
-# 	The objective is to use linear regression to understand how advertisement spending impacts sales.
-	
-# 	### Data Description
-# 	TV
-# 	Radio
-# 	Newspaper
-# 	Sales
-# """)
-
-
-#st.subheader("Checkbox")
-# Sidebar - Collects user input features into dataframe
-with st.sidebar.header('1. Upload your CSV data'):
-    uploaded_file = st.sidebar.file_uploader("Upload your CSV data file", type=["csv"])
-    st.sidebar.markdown("""
-[Example dataset](https://raw.githubusercontent.com/dataprofessor/data/master/delaney_solubility_with_descriptors.csv)
-""")
-    
-st.sidebar.title("2. Operations on the Dataset")
-w1 = st.sidebar.checkbox("show table", False)
-linechart=st.sidebar.checkbox("Linechart",False)
-plot= st.sidebar.checkbox("show plots", False)
-plothist= st.sidebar.checkbox("show hist plots", False)
-trainmodel= st.sidebar.checkbox("Train model", False)
-dokfold= st.sidebar.checkbox("DO KFold", False)
-Forecast= st.sidebar.checkbox("Forecast", False)
+import plotly.graph_objs as go
+import base64
 
 
 
-#st.write(w1)
 
-st.subheader('1. Dataset')
+# Title
+st.title('SIRGE Cattle Emissions Prediction App')
+st.write(""" 
+## Introduction
+In this implementation, Streamlit is used to create an application that calculates and predicts cattle emissions. The app accepts user input data manually or in CSV format.
+The first form that appears when the app is launched allows the user to enter data manually. The user is asked to input the number of bulls, cows, calves (female and male), steers, heifers, and oxen. After entering the data, the app performs a calculation based on the entered values and displays the result.
+The second form allows the user to upload a CSV file containing cattle emission data. Once uploaded, the data is displayed in a table, and the app calculates the emissions based on the data in the file. The calculated emissions are displayed in a line chart, and a bar chart showing the emissions by ZARDI is also displayed.
+The third section of the app uses linear regression to predict cattle emissions. The user can see the performance of the model on the test set and the R-squared score. A new dataframe with predicted emissions is also displayed, and a graph comparing the actual emissions and the predicted emissions is shown.""")
 
+# Create a form to accept user input
+if st.sidebar.button("Enter data Manually"):
 
-######---------------- Machine learning Part ------------------------###################
-# Model building
+    st.markdown(f'Please enter the number of:')
+    a = st.number_input('Bulls:', value=0.0)
+    b = st.number_input('Cows:', value=0.0)
+    c = st.number_input('Calves Female:', value=0.0)
+    d = st.number_input('Calves Male:', value=0.0)
+    e = st.number_input('Steers:', value=0.0)
+    f = st.number_input('Heifers:', value=0.0)
+    g = st.number_input('Oxen:', value=0.0)
 
-def build_model(df):
-    st.write("""
-# Machine Learning Implementation
-In this implementation, the *RandomForestRegressor()* function is used in this app for build a regression model using the **Random Forest** algorithm.
-Try adjusting the hyperparameters!
-# Note!
-1. This is only for testing pouporses and as such, some features may note work correctly until development is complete. 
-2. Data used is also just for testing and does not represent the final accurate data to be used in the model.
-""")
-    
-    #df["Numbers"] = [float(str(i).replace(",", "")) for i in df["Numbers"]]
-    X = df.iloc[:,:-1] # Using all column except for the last column as X
-    Y = df.iloc[:,-1] # Selecting the last column as Y
-    #df = df.replace(r'^\s*$', np.nan, regex=True)
-    
+    # Perform a calculation
+    z= (a * 52.9421548392805) + (b * 41.1936984829892) + (c * 14.6420826883893) + (d * 17.7291651070273) + (e * 48.7973035004382) + (f * 39.6739869697752) + (g * 50.1822857909654)
 
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=(100-split_size)/100)
+    # Display the output
+    st.markdown(f'The total emission is <p style="color:red"> {z}</p>', unsafe_allow_html=True)
 
-    # Data splitting 
-    st.markdown('**1.2. Data splits**')
-    st.write('Training set')
-    st.info(X_train.shape)
-    st.write('Test set')
-    st.info(X_test.shape)
-    
-
-    st.markdown('**1.3. Variable details**:')
-    st.write('X variable')
-    st.info(list(X.columns))
-    st.write('Y variable')
-    st.info(Y.name)
-    
-
-    #Data splitting
-    
-    
-    rf = RandomForestRegressor(n_estimators=parameter_n_estimators,
-        random_state=parameter_random_state,
-        max_features=parameter_max_features,
-        
-        min_samples_split=parameter_min_samples_split,
-        min_samples_leaf=parameter_min_samples_leaf,
-        bootstrap=parameter_bootstrap,
-        oob_score=parameter_oob_score,
-        n_jobs=parameter_n_jobs)
-    rf.fit(X_train, Y_train)
-
-    st.subheader('2. Model Performance')
-
-    st.markdown('**2.1. Training set**')
-    Y_pred_train = rf.predict(X_train)
-    st.write('Coefficient of determination ($R^2$):')
-    st.info( r2_score(Y_train, Y_pred_train) )
-
-    st.write('Error (MSE or MAE):')
-    st.info( mean_squared_error(Y_train, Y_pred_train) )
-
-    st.markdown('**2.2. Test set**')
-    Y_pred_test = rf.predict(X_test)
-    st.write('Coefficient of determination ($R^2$):')
-    st.info( r2_score(Y_test, Y_pred_test) )
-
-    st.write('Error (MSE or MAE):')
-    st.info( mean_squared_error(Y_test, Y_pred_test) )
-
-    st.subheader('3. Model Parameters')
-    st.write(rf.get_params())
+# Create a form to accept user csv file upload
 
     
+data = st.sidebar.file_uploader('Upload your data', type='csv')
 
-#---------------------------------#
+# If data is uploaded, display it in a table and perform the calculation
+if data:
+    df = pd.read_csv(data)
+    st.write('Input Data')
+    st.dataframe(df)
+  
+    st.write('Calculated Emissions')
+    # Apply the calculation to each row of the table
+    df['Emissions'] = (df['Bull'] * 2) + (df['Calves_female'] * 3) + (df['Calves_male'] * 5) + (df['Cows'] * 6) + (df['Hiefers'] * 7) + (df['Oxen'] * 8)# Modify this line to perform your desired calculation
+    
+    
 
-# Sidebar - Specify parameter settings
-if trainmodel:
- with st.sidebar.header('2. Set Parameters'):
-    split_size = st.sidebar.slider('Data split ratio (% for Training Set)', 10, 90, 80, 5)
+    st.write('Output Data')
+    st.dataframe(df)
+    st.line_chart(df['Emissions'])
 
- with st.sidebar.subheader('2.1. Learning Parameters'):
-    parameter_n_estimators = st.sidebar.slider('Number of estimators (n_estimators)', 0, 1000, 100, 100)
-    parameter_max_features = st.sidebar.select_slider('Max features (max_features)', options=['auto', 'sqrt', 'log2'])
-    parameter_min_samples_split = st.sidebar.slider('Minimum number of samples required to split an internal node (min_samples_split)', 1, 10, 2, 1)
-    parameter_min_samples_leaf = st.sidebar.slider('Minimum number of samples required to be at a leaf node (min_samples_leaf)', 1, 10, 2, 1)
+    # Draw a bar chart of the emissions
+    chart = alt.Chart(df).mark_bar().encode(
+        x='ZARDIUganda',
+        y='Emissions'
+    ).properties(
+        title='Emissions by ZARDI'
+    )
+    st.altair_chart(chart, use_container_width=True)
 
- with st.sidebar.subheader('2.2. General Parameters'):
-    parameter_random_state = st.sidebar.slider('Seed number (random_state)', 0, 1000, 42, 1)
-    parameter_criterion = st.sidebar.select_slider('Performance measure (criterion)', options=['mse', 'mae'])
-    parameter_bootstrap = st.sidebar.select_slider('Bootstrap samples when building trees (bootstrap)', options=[True, False])
-    parameter_oob_score = st.sidebar.select_slider('Whether to use out-of-bag samples to estimate the R^2 on unseen data (oob_score)', options=[False, True])
-    parameter_n_jobs = st.sidebar.select_slider('Number of jobs to run in parallel (n_jobs)', options=[1, -1])
+    # Create a line chart of sepal length by species
+    fig = px.line(df, x='Year', y='Emissions', color='ZARDIUganda',
+                title='Emissions by ZARDI', 
+                labels={'x': 'Year', 'y': 'Emissions', 'ZARDI': 'ZARDI'})
+    fig.update_traces(mode='markers+lines')
+    fig.update_layout(hovermode='x')
+
+    # Show the chart in Streamlit
+    st.plotly_chart(fig)
 
 
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    st.markdown('**1.1. Glimpse of dataset**')
+####--------- Linear Regression and Prediction Model ----------###########
+    st.markdown("# Creating and Testing the Machine Learning Model")
+    # Use get_dummies to one-hot encode categorical variables
+    df_encoded = pd.get_dummies(df[['Year', 'ZARDIUganda', 'Emissions']])
+
+    # Split the data into training and testing sets
+    X = df_encoded.drop("Emissions", axis=1)
+    y = df_encoded["Emissions"]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Add model parameters
+    st.write('#### Model Parameters')
+    st.write('##### Test size:', 0.2)
+    st.write('##### Random state:', 42)
+
+    # Fit a linear regression model
+    model = LinearRegression().fit(X_train, y_train)    
+
+    # Evaluate the performance of the model on the test set
+    score = model.score(X_test, y_test)
+    st.write("##### R-squared score:", score)
+
+    st.markdown("# Predictions ")
+    st.markdown("### Updated Dataset with predicted values ")
+
+    # Use the trained model to make predictions
+    y_pred = model.predict(X)
+
+    # Add the predicted values to the dataframe
+    df['Emissions_Predicted'] = y_pred
+
+    # Display the updated dataframe
     st.write(df)
     
+    st.markdown("### Prediction Graphs ")
+    
+    # Create a new DataFrame with the predicted emissions
+    df_pred = df[['Year', 'Emissions']].copy()
+    df_pred['Emissions_Predicted'] = model.predict(X)
 
-    def plot_raw_data():
-     fig = go.Figure()
-     fig.add_trace(go.Scatter(x=df['DATE'], y=df['EF'], name='emission_factors'))
-     fig.add_trace(go.Scatter(x=df['DATE'], y=df['AvgTemp'], name='average_temp'))
-    # fig.add_trace(go.Scatter(x=data['Date'], y=data['High'], name='stock_high'))
-    # fig.add_trace(go.Scatter(x=data['Date'], y=data['Low'], name='stock_low'))
-     fig.layout.update(title_text="Time Series Data", xaxis_rangeslider_visible=True)
-     
+    # Create a new figure
+    fig, ax = plt.subplots()
 
-     tab1, tab2 = st.tabs(["Streamlit theme (default)", "Plotly native theme"])
-     with tab1:
-      # Use the Streamlit theme.
-       # This is the default. So you can also omit the theme argument.
-      st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-      with tab2:
-      # Use the native Plotly theme.
-       st.plotly_chart(fig, theme=None, use_container_width=True)
+    # Plot the actual and predicted emissions
+    sns.lineplot(data=df_pred, x='Year', y='Emissions', label='Actual', ax=ax)
+    sns.lineplot(data=df_pred, x='Year', y='Emissions_Predicted', label='Predicted', ax=ax)
 
-    plot_raw_data()
+    # Set plot title and axis labels
+    ax.set_title('Actual vs Predicted Emissions (only current data)')
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Emissions (metric tons)')
 
-    df = pd.DataFrame(
-    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-    columns=['lat', 'lon'])
-
-    st.map(df)
+    # Show the plot
+    plt.legend()
+    st.pyplot(fig)
 
 
-    build_model(df)
-else:
-    st.info('Awaiting for CSV file to be uploaded.')
-    st.write('CSV file file must have columns of; "DATE", "AvgTemp", "MinTemp", "MaxTemp", "Total", "Local", "Exotic", "EF"')
-    if st.button('Press to use Example Dataset'):
-        # Diabetes dataset
-        #diabetes = load_diabetes()
-        #X = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
-        #Y = pd.Series(diabetes.target, name='response')
-        #df = pd.concat( [X,Y], axis=1 )
+    # Create a new DataFrame with the predicted emissions
+    df_pred = df[['Year', 'Emissions']].copy()
+    df_pred['Emissions_Predicted'] = model.predict(X)
 
-        #st.markdown('The Diabetes dataset is used as the example.')
-        #st.write(df.head(5))
+    # Create a new dataset with the years we want to predict emissions for
+    years_pred = pd.DataFrame({'Year': range(2015, 2036)})
 
-        # Boston housing dataset
-        diabetes = load_diabetes()
-        X = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
-        Y = pd.Series(diabetes.target, name='response')
-        df = pd.concat( [X,Y], axis=1 )
+    # Use get_dummies to one-hot encode categorical variables
+    df_pred_encoded = pd.get_dummies(years_pred.merge(df[['Year', 'ZARDIUganda']], how='left', on='Year'))
 
-        st.markdown('The Diabetes dataset is used as the example.')
-        st.write(df.head(5))
+    # Use the trained model to make predictions
+    y_pred = model.predict(df_pred_encoded)
 
-        build_model(df)
+    # Add the predicted values to the dataframe
+    df_pred_encoded['Emissions_Predicted'] = y_pred
 
-######---------------- Machine learning Part END ------------------------###################
+    # Concatenate the original and predicted dataframes
+    df_pred = pd.concat([df_pred, df_pred_encoded[['Year', 'Emissions_Predicted']]])
+
+    # Create a new figure
+    fig, ax = plt.subplots()
+
+    # Plot the actual and predicted emissions
+    sns.lineplot(data=df_pred, x='Year', y='Emissions', label='Actual trend', ax=ax)
+    sns.lineplot(data=df_pred, x='Year', y='Emissions_Predicted', label='Predicted trend', ax=ax)
+
+    # Set plot title and axis labels
+    ax.set_title('Actual vs Predicted Emissions (2015-2036)')
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Emissions (metric tons)')
+
+    # Show the plot
+    plt.legend()
+    st.pyplot(fig)
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df_pred['Year'], y=df_pred['Emissions'], name='Actual'))
+    fig.add_trace(go.Scatter(x=df_pred['Year'], y=df_pred['Emissions_Predicted'], name='Predicted'))
+    fig.update_layout(title='Actual vs Predicted Emissions for the Next 10 Years', xaxis_title='Year', yaxis_title='Emissions (metric tons)')
+    st.plotly_chart(fig)
 
 
-@st.cache
-def read_data():
-    return pd.read_csv(uploaded_file)
-df.dropna(inplace= True)
-# df = df[df['ds'].notna()]
-df.reset_index(drop=True, inplace=True)
-df=df[["DATE","EF"]]
+    # Generate analysis report
+    st.markdown("# Analysis Report")
 
-#st.dataframe(df)
-
-df.columns = ['ds','y']
-df['ds'] = pd.to_datetime(df['ds'])
-df.tail()
+    # Save analysis report
+    st.markdown("## Download Analysis Report")
+    html = "<h1>Analysis Report</h1>"
+    html += df.to_html()
+    filename = "analysis_report.html"
+    b64 = base64.b64encode(html.encode()).decode()
+    href = f'<a href="data:file/html;base64,{b64}" download="{filename}">Download HTML report</a>'
+    st.markdown(href, unsafe_allow_html=True)
 
 
-#st.write(df)
+# Define the calculation function
+# base_data = pd.read_csv('src\Uganda_total_emissions.csv')
 
-#st.write(df)
-if w1:
+if st.button("Use Sample Dataset"):
+    df = pd.read_csv('Uganda_total_emissions.csv')
+    st.write('Input Data')
     st.dataframe(df)
-
-
-if linechart:
-	st.subheader("Line chart")
-	st.line_chart(
-    df,
-    x="ds",
-    y=["y"],  # <-- You can pass multiple columns!
-
-)
-if plothist:
-    st.subheader("Distributions of each Parameter")
-    options = ("AvgTemp", "MinTemp", "Annual Growth Rate", "MaxTemp", "Total", "Local", "Exotic", "EF")
-    sel_cols = st.selectbox("select columns", options,1)
-    st.write(sel_cols)
-    #f=plt.figure()
-    fig = go.Histogram(x=df[sel_cols],nbinsx=50)
-    st.plotly_chart([fig])
+  
+    st.write('Calculated Emissions')
+    # Apply the calculation to each row of the table
+    df['Emissions'] = (df['Bull'] * 2) + (df['Calves_female'] * 3) + (df['Calves_male'] * 5) + (df['Cows'] * 6) + (df['Hiefers'] * 7) + (df['Oxen'] * 8)# Modify this line to perform your desired calculation
+    
     
 
-#    plt.hist(df[sel_cols])
-#    plt.xlabel(sel_cols)
-#    plt.ylabel("sales")
-#    plt.title(f"{sel_cols} vs Sales")
-    #plt.show()	
-#    st.plotly_chart(f)
+    st.write('Output Data')
+    st.dataframe(df)
+    st.line_chart(df['Emissions'])
 
-if plot:
-    st.subheader("correlation between Parameters")
-    options = ("AvgTemp", "MinTemp", "MaxTemp", "Total", "Local", "Exotic", "EF")
-    w7 = st.selectbox("Ad medium", options,1)
-    st.write(w7)
-    f=plt.figure()
-    plt.scatter(df[w7],df["DATE"])
-    plt.xlabel(w7)
-    plt.ylabel("sales")
-    plt.title(f"{w7} vs DATE")
-    #plt.show()	
-    st.plotly_chart(f)
+    # Draw a bar chart of the emissions
+    chart = alt.Chart(df).mark_bar().encode(
+        x='ZARDIUganda',
+        y='Emissions'
+    ).properties(
+        title='Emissions by ZARDI'
+    )
+    st.altair_chart(chart, use_container_width=True)
 
+    # Create a line chart of sepal length by species
+    fig = px.line(df, x='Year', y='Emissions', color='ZARDIUganda',
+                title='Emissions by ZARDI', 
+                labels={'x': 'Year', 'y': 'Emissions', 'ZARDI': 'ZARDI'})
+    fig.update_traces(mode='markers+lines')
+    fig.update_layout(hovermode='x')
+
+    # Show the chart in Streamlit
+    st.plotly_chart(fig)
+
+
+####--------- Linear Regression and Prediction Model ----------###########
+    st.markdown("# Creating and Testing the Machine Learning Model")
+    # Use get_dummies to one-hot encode categorical variables
+    df_encoded = pd.get_dummies(df[['Year', 'ZARDIUganda', 'Emissions']])
+
+    # Split the data into training and testing sets
+    X = df_encoded.drop("Emissions", axis=1)
+    y = df_encoded["Emissions"]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Add model parameters
+    st.write('#### Model Parameters')
+    st.write('##### Test size:', 0.2)
+    st.write('##### Random state:', 42)
+
+    # Fit a linear regression model
+    model = LinearRegression().fit(X_train, y_train)    
+
+    # Evaluate the performance of the model on the test set
+    score = model.score(X_test, y_test)
+    st.write("##### R-squared score:", score)
+
+    st.markdown("# Predictions ")
+    st.markdown("### Updated Dataset with predicted values ")
+
+    # Use the trained model to make predictions
+    y_pred = model.predict(X)
+
+    # Add the predicted values to the dataframe
+    df['Emissions_Predicted'] = y_pred
+
+    # Display the updated dataframe
+    st.write(df)
     
+    st.markdown("### Prediction Graphs ")
+    
+    # Create a new DataFrame with the predicted emissions
+    df_pred = df[['Year', 'Emissions']].copy()
+    df_pred['Emissions_Predicted'] = model.predict(X)
 
-   
+    # Create a new figure
+    fig, ax = plt.subplots()
 
-# trainmodel= st.checkbox("Train model", False)
-if trainmodel:
-	st.header("Modeling")
-	y=df.ds
-	X=df[["y"]].values
-	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+    # Plot the actual and predicted emissions
+    sns.lineplot(data=df_pred, x='Year', y='Emissions', label='Actual', ax=ax)
+    sns.lineplot(data=df_pred, x='Year', y='Emissions_Predicted', label='Predicted', ax=ax)
 
-	lrgr = LinearRegression()
-	lrgr.fit(X_train,y_train)
-	pred = lrgr.predict(X_test)
+    # Set plot title and axis labels
+    ax.set_title('Actual vs Predicted Emissions (only current data)')
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Emissions (metric tons)')
 
-	mse = mean_squared_error(y_test,pred)
-	rmse = sqrt(mse)
-
-	st.markdown(f"""
-	Linear Regression model trained :
-		- MSE:{mse}
-		- RMSE:{rmse}
-	""")
-	st.success('Model trained successfully')
-
-if Forecast:
-	st.header("Forecast")
-n_years = st.slider("Years of prediction:", 1 , 10)
-period = n_years * 365
-        
-df_train = df[['ds','y']]
-df_train = df_train.rename(columns={"ds": "ds", "y": "y"})
-df.reset_index(drop=True)
-
-m=Prophet(growth='linear')
-m.fit(df_train)
-future = m.make_future_dataframe(periods=period) # freq='M'
-forecast = m.predict(future)
-
-st.subheader('Forecast data')
-#st.write(forecast.tail())
-
-fig2 = plot_plotly(m, forecast)
-st.plotly_chart(fig2)
-
-st.subheader('Forecast Components')
-fig4 = m.plot_components(forecast)
-st.write(fig4)
+    # Show the plot
+    plt.legend()
+    st.pyplot(fig)
 
 
-if dokfold:
-	st.subheader("KFOLD Random sampling Evalution")
-	st.empty()
-	my_bar = st.progress(0)
+    # Create a new DataFrame with the predicted emissions
+    df_pred = df[['Year', 'Emissions']].copy()
+    df_pred['Emissions_Predicted'] = model.predict(X)
 
-	from sklearn.model_selection import KFold
+    # Create a new dataset with the years we want to predict emissions for
+    years_pred = pd.DataFrame({'Year': range(2015, 2036)})
 
-	X=df.values[:,-1].reshape(-1,1)
-	y=df.values[:,-1]
-	#st.progress()
-	kf=KFold(n_splits=10)
-	#X=X.reshape(-1,1)
-	mse_list=[]
-	rmse_list=[]
-	r2_list=[]
-	idx=1
-	fig=plt.figure()
-	i=0
-	for train_index, test_index in kf.split(X):
-	#	st.progress()
-		my_bar.progress(idx*10)
-		X_train, X_test = X[train_index], X[test_index]
-		y_train, y_test = y[train_index], y[test_index]
-		lrgr = LinearRegression()
-		lrgr.fit(X_train,y_train)
-		pred = lrgr.predict(X_test)
-		
-		mse = mean_squared_error(y_test,pred)
-		rmse = sqrt(mse)
-		r2=r2_score(y_test,pred)
-		mse_list.append(mse)
-		rmse_list.append(rmse)
-		r2_list.append(r2)
-		plt.plot(pred,label=f"dataset-{idx}")
-		idx+=1
-	plt.legend()
-	plt.xlabel("Data points")
-	plt.ylabel("PRedictions")
-	plt.show()
-	st.plotly_chart(fig)
+    # Use get_dummies to one-hot encode categorical variables
+    df_pred_encoded = pd.get_dummies(years_pred.merge(df[['Year', 'ZARDIUganda']], how='left', on='Year'))
 
-	res=pd.DataFrame(columns=["MSE","RMSE","r2_SCORE"])
-	res["MSE"]=mse_list
-	res["RMSE"]=rmse_list
-	res["r2_SCORE"]=r2_list
+    # Use the trained model to make predictions
+    y_pred = model.predict(df_pred_encoded)
 
-	st.write(res)
-	st.balloons()
-#st.subheader("results of KFOLD")
+    # Add the predicted values to the dataframe
+    df_pred_encoded['Emissions_Predicted'] = y_pred
 
-#f=res.plot(kind='box',subplots=True)
-#st.plotly_chart([f])
+    # Concatenate the original and predicted dataframes
+    df_pred = pd.concat([df_pred, df_pred_encoded[['Year', 'Emissions_Predicted']]])
+
+    # Create a new figure
+    fig, ax = plt.subplots()
+
+    # Plot the actual and predicted emissions
+    sns.lineplot(data=df_pred, x='Year', y='Emissions', label='Actual trend', ax=ax)
+    sns.lineplot(data=df_pred, x='Year', y='Emissions_Predicted', label='Predicted trend', ax=ax)
+
+    # Set plot title and axis labels
+    ax.set_title('Actual vs Predicted Emissions (2015-2036)')
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Emissions (metric tons)')
+
+    # Show the plot
+    plt.legend()
+    st.pyplot(fig)
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df_pred['Year'], y=df_pred['Emissions'], name='Actual'))
+    fig.add_trace(go.Scatter(x=df_pred['Year'], y=df_pred['Emissions_Predicted'], name='Predicted'))
+    fig.update_layout(title='Actual vs Predicted Emissions for the Next 10 Years', xaxis_title='Year', yaxis_title='Emissions (metric tons)')
+    st.plotly_chart(fig)
 
 
+    # Generate analysis report
+    st.markdown("# Analysis Report")
 
+    # Save analysis report
+    st.markdown("## Download Analysis Report")
+    html = "<h1>Analysis Report</h1>"
+    html += df.to_html()
+    filename = "analysis_report.html"
+    b64 = base64.b64encode(html.encode()).decode()
+    href = f'<a href="data:file/html;base64,{b64}" download="{filename}">Download HTML report</a>'
+    st.markdown(href, unsafe_allow_html=True)
