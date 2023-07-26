@@ -145,7 +145,7 @@ if data:
     df_pred['Emissions_Predicted'] = model.predict(X)
 
     # Create a new dataset with the years we want to predict emissions for
-    years_pred = pd.DataFrame({'Year': range(2020, 2030)})
+    years_pred = pd.DataFrame({'Year': range(2010, 2030)})
 
     # Use get_dummies to one-hot encode categorical variables
     df_pred_encoded = pd.get_dummies(years_pred.merge(df[['Year', 'ZARDIUganda']], how='left', on='Year'))
@@ -296,7 +296,7 @@ if data:
     df_pred['Emissions_Predicted'] = model.predict(X)
 
     # Create a new dataset with the years we want to predict emissions for
-    years_pred = pd.DataFrame({'Year': range(2020, 2030)})
+    years_pred = pd.DataFrame({'Year': range(2010, 2030)})
 
     # Use get_dummies to one-hot encode categorical variables
     df_pred_encoded = pd.get_dummies(years_pred.merge(df[['Year', 'ZARDIUganda']], how='left', on='Year'))
@@ -447,7 +447,7 @@ if st.button("Use NoneDairy Dataset"):
     df_pred['Emissions_Predicted'] = model.predict(X)
 
     # Create a new dataset with the years we want to predict emissions for
-    years_pred = pd.DataFrame({'Year': range(2020, 2030)})
+    years_pred = pd.DataFrame({'Year': range(2010, 2030)})
 
     # Use get_dummies to one-hot encode categorical variables
     df_pred_encoded = pd.get_dummies(years_pred.merge(df[['Year', 'ZARDIUganda']], how='left', on='Year'))
@@ -594,7 +594,7 @@ if st.button("Use Dairy cattle dataset"):
     df_pred['Emissions_Predicted'] = model.predict(X)
 
     # Create a new dataset with the years we want to predict emissions for
-    years_pred = pd.DataFrame({'Year': range(2020, 2030)})
+    years_pred = pd.DataFrame({'Year': range(2010, 2030)})
 
     # Use get_dummies to one-hot encode categorical variables
     df_pred_encoded = pd.get_dummies(years_pred.merge(df[['Year', 'ZARDIUganda']], how='left', on='Year'))
